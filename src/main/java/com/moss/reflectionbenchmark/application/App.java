@@ -1,6 +1,7 @@
 package com.moss.reflectionbenchmark.application;
 
-import com.moss.reflectionbenchmark.test.Test;
+import com.moss.reflectionbenchmark.test.TestManager;
+
 
 /**
  * Reflection Benchmark
@@ -8,13 +9,14 @@ import com.moss.reflectionbenchmark.test.Test;
  */
 public class App {
 
-	public static void main(String[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Test test = new Test();
-		long directTime = test.testDirectAccess(100000);
-		long reflectionTime = test.testReflectionAccess(100000);
-
-		System.out.println("Direct time     : " + directTime);
-		System.out.println("Reflection time : " + reflectionTime);
+	public final static int NUMBER_OF_TESTS = 1000;
+	
+	public static void main(String[] args) {
+		TestManager testManager = new TestManager();
+		for (int i = 0; i < NUMBER_OF_TESTS; i++) {
+			testManager.runTest();
+		}
+		testManager.printResult();
 	}
 
 }

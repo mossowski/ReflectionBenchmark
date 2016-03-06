@@ -12,22 +12,43 @@ public class Test {
 		person = new Person();
 	}
 
-	public long testDirectAccess(int m) {
+	public long testNameDirectAccess(int m) {
 		long start = System.currentTimeMillis();
-		int x;
+		String name;
 		for (int i = 0; i < m; i++) {
-			x = person.age;
+			name = person.name;
+		}
+		long end = System.currentTimeMillis();
+		return end - start;
+	}
+	
+	public long testAgeDirectAccess(int m) {
+		long start = System.currentTimeMillis();
+		int age;
+		for (int i = 0; i < m; i++) {
+			age = person.age;
+		}
+		long end = System.currentTimeMillis();
+		return end - start;
+	}
+	
+	public long testNameReflectionAccess(int m) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		long start = System.currentTimeMillis();
+		String name;
+		for (int i = 0; i < m; i++) {
+			Field field = person.getClass().getField("name");
+			name = (String) field.get(person);
 		}
 		long end = System.currentTimeMillis();
 		return end - start;
 	}
 
-	public long testReflectionAccess(int m) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+	public long testAgeReflectionAccess(int m) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		long start = System.currentTimeMillis();
-		int x;
+		int age;
 		for (int i = 0; i < m; i++) {
 			Field field = person.getClass().getField("age");
-			x = (Integer) field.get(person);
+			age = (Integer) field.get(person);
 		}
 		long end = System.currentTimeMillis();
 		return end - start;
