@@ -21,7 +21,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.4.0</version>
         <configuration>
-          <mainClass>com.moss.reflectionbenchmark.App</mainClass>
+          <mainClass>com.moss.reflectionbenchmark.application.App</mainClass>
         </configuration>
       </plugin>
     </plugins>
