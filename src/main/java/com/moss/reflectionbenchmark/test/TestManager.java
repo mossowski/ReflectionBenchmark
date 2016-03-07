@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class TestManager {
 	
 	public final static int NUMBER_OF_EXECUTIONS = 100000;
+	public final static int NUMBER_OF_EXECUTIONS_WARMUP = 100000;
 
 	public static ArrayList<Long> timesDirectAccessGetName;
 	public static ArrayList<Long> timesDirectAccessGetAge;
@@ -31,6 +32,22 @@ public class TestManager {
 		timesReflectionAccessSetName = new ArrayList<Long>();
 		timesReflectionAccessSetAge = new ArrayList<Long>();
 		timesReflectionAccessMethod = new ArrayList<Long>();
+	}
+	
+	public void warmup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+		Test test = new Test();
+
+		test.testNameDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP, true);
+		test.testAgeDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP, true);
+		test.testNameDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP, false);
+		test.testAgeDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP, false);
+		test.testMessageDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP);
+
+		test.testNameReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP, true);
+		test.testAgeReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP, true);
+		test.testNameReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP, false);
+		test.testAgeReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP, false);
+		test.testMessageReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP);
 	}
 	
 	

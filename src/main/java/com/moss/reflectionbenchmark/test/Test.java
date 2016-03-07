@@ -95,7 +95,6 @@ public class Test {
 			Method method = person.getClass().getMethod("message", String.class);
 			message = (String) method.invoke(person, "secret reflect message");
 		}
-		System.out.println(message);
 		long end = System.currentTimeMillis();
 		return end - start;
 	}
