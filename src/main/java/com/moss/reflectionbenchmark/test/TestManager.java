@@ -97,7 +97,6 @@ public class TestManager {
 		int remove = timeArray.size() / 5;
 		for (int i = 0; i < remove; i++) {
 			timeArray.remove(0);
-			timeArray.remove(timeArray.size() - 1);
 		}
 	}
 
