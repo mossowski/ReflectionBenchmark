@@ -77,7 +77,7 @@ public class Test {
 		for (int i = 0; i < m; i++) {
 			if (flag) {
 				Field field = person.getClass().getField("age");
-				age = (Integer) field.get(person);
+				age = field.getInt(person);
 			}
 			else {
 				Field field = person.getClass().getField("age");
