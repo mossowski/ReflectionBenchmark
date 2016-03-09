@@ -4,9 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class TestManager {
-	
-	public final static int NUMBER_OF_EXECUTIONS = 10000;
-	public final static int NUMBER_OF_EXECUTIONS_WARMUP = 100000;
 
 	public static ArrayList<Long> timesDirectAccessGetName;
 	public static ArrayList<Long> timesDirectAccessGetAge;
@@ -19,6 +16,8 @@ public class TestManager {
 	public static ArrayList<Long> timesReflectionAccessSetName;
 	public static ArrayList<Long> timesReflectionAccessSetAge;
 	public static ArrayList<Long> timesReflectionAccessMethod;
+
+	// --------------------------------------------------------------------------------------
 
 	public TestManager() {
 		timesDirectAccessGetName = new ArrayList<Long>();
@@ -33,52 +32,27 @@ public class TestManager {
 		timesReflectionAccessSetAge = new ArrayList<Long>();
 		timesReflectionAccessMethod = new ArrayList<Long>();
 	}
-	
-	public void warmup() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-		Test test = new Test();
 
-		test.testNameDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP, true);
-		test.testAgeDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP, true);
-		test.testNameDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP, false);
-		test.testAgeDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP, false);
-		test.testMessageDirectAccess(NUMBER_OF_EXECUTIONS_WARMUP);
+	// --------------------------------------------------------------------------------------
 
-		test.testNameReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP, true);
-		test.testAgeReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP, true);
-		test.testNameReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP, false);
-		test.testAgeReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP, false);
-		test.testMessageReflectionAccess(NUMBER_OF_EXECUTIONS_WARMUP);
-	}
-	
-	
 	public void runTest() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 		Test test = new Test();
 
-		long timeDirectAccessGetName = test.testNameDirectAccess(NUMBER_OF_EXECUTIONS, true);
-		long timeDirectAccessGetAge = test.testAgeDirectAccess(NUMBER_OF_EXECUTIONS, true);
-		long timeDirectAccessSetName = test.testNameDirectAccess(NUMBER_OF_EXECUTIONS, false);
-		long timeDirectAccessSetAge = test.testAgeDirectAccess(NUMBER_OF_EXECUTIONS, false);
-		long timeDirectAccessMethod = test.testMessageDirectAccess(NUMBER_OF_EXECUTIONS);
+		timesDirectAccessGetName.add(test.testNameDirectAccess(true));
+		timesDirectAccessGetAge.add(test.testAgeDirectAccess(true));
+		timesDirectAccessSetName.add(test.testNameDirectAccess(false));
+		timesDirectAccessSetAge.add(test.testAgeDirectAccess(false));
+		timesDirectAccessMethod.add(test.testMessageDirectAccess());
 
-		long timeReflectionAccessGetName = test.testNameReflectionAccess(NUMBER_OF_EXECUTIONS, true);
-		long timeReflectionAccessGetAge = test.testAgeReflectionAccess(NUMBER_OF_EXECUTIONS, true);
-		long timeReflectionAccessSetName = test.testNameReflectionAccess(NUMBER_OF_EXECUTIONS, false);
-		long timeReflectionAccessSetAge = test.testAgeReflectionAccess(NUMBER_OF_EXECUTIONS, false);
-		long timeReflectionAccessMethod = test.testMessageReflectionAccess(NUMBER_OF_EXECUTIONS);
-
-		timesDirectAccessGetName.add(timeDirectAccessGetName);
-		timesDirectAccessGetAge.add(timeDirectAccessGetAge);
-		timesDirectAccessSetName.add(timeDirectAccessSetName);
-		timesDirectAccessSetAge.add(timeDirectAccessSetAge);
-		timesDirectAccessMethod.add(timeDirectAccessMethod);
-
-		timesReflectionAccessGetName.add(timeReflectionAccessGetName);
-		timesReflectionAccessGetAge.add(timeReflectionAccessGetAge);
-		timesReflectionAccessSetName.add(timeReflectionAccessSetName);
-		timesReflectionAccessSetAge.add(timeReflectionAccessSetAge);
-		timesReflectionAccessMethod.add(timeReflectionAccessMethod);
+		timesReflectionAccessGetName.add(test.testNameReflectionAccess(true));
+		timesReflectionAccessGetAge.add(test.testAgeReflectionAccess(true));
+		timesReflectionAccessSetName.add(test.testNameReflectionAccess(false));
+		timesReflectionAccessSetAge.add(test.testAgeReflectionAccess(false));
+		timesReflectionAccessMethod.add(test.testMessageReflectionAccess());
 	}
-	
+
+	// --------------------------------------------------------------------------------------
+
 	public void printResult() {
 		System.out.println("Direct access get name     : " + prepareData(timesDirectAccessGetName));
 		System.out.println("Direct access get age      : " + prepareData(timesDirectAccessGetAge));
@@ -93,12 +67,16 @@ public class TestManager {
 		System.out.println("Reflection access method   : " + prepareData(timesReflectionAccessMethod));
 	}
 
+	// --------------------------------------------------------------------------------------
+
 	public long prepareData(ArrayList<Long> timeArray) {
 		long time = 0;
 		removeOutsiders(timeArray);
 		time = countAverageTime(timeArray);
 		return time;
 	}
+
+	// --------------------------------------------------------------------------------------
 
 	public long countAverageTime(ArrayList<Long> timeArray) {
 		long averageTime = 0;
@@ -112,17 +90,19 @@ public class TestManager {
 		}
 		return averageTime;
 	}
-	
+
+	// --------------------------------------------------------------------------------------
+
 	public void removeOutsiders(ArrayList<Long> timeArray) {
-		if (timeArray.size() > 10) {
-			int remove = timeArray.size() / 10;
-			for (int i = 0; i < remove; i++) {
-				timeArray.remove(0);
-				timeArray.remove(timeArray.size() - 1);
-			}
+		int remove = timeArray.size() / 5;
+		for (int i = 0; i < remove; i++) {
+			timeArray.remove(0);
+			timeArray.remove(timeArray.size() - 1);
 		}
 	}
-	
+
+	// --------------------------------------------------------------------------------------
+
 	public void printResultTimes() {
 		printTimes(timesDirectAccessGetName);
 		printTimes(timesDirectAccessGetAge);
@@ -136,7 +116,9 @@ public class TestManager {
 		printTimes(timesReflectionAccessSetAge);
 		printTimes(timesReflectionAccessMethod);
 	}
-	
+
+	// --------------------------------------------------------------------------------------
+
 	public void printTimes(ArrayList<Long> timeArray) {
 		for (int i = 0; i < timeArray.size(); i++) {
 			System.out.print(" " + timeArray.get(i));
